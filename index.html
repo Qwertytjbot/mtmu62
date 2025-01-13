@@ -1,255 +1,633 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Creative School Website</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Arial', sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Космическая обсерватория</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00ff88;
+            --secondary: #8400ff;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --light: #ffffff;
+        }
 
-    body {
-      background: linear-gradient(to bottom, #ffcc33, #002366);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    header {
-      width: 100%;
-      padding: 1.5rem;
-      background: #002366;
-      color: #ffcc33;
-      text-align: center;
-      font-size: 2rem;
-      font-weight: bold;
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-      letter-spacing: 3px;
-    }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+        }
 
-    .hero {
-      text-align: center;
-      padding: 3rem 1.5rem;
-      background: url('https://via.placeholder.com/800x400') no-repeat center;
-      background-size: cover;
-      color: #ffcc33;
-      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
-    }
+        /* Звёздный фон */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-    .hero h1 {
-      font-size: 3.5rem;
-      margin-bottom: 1rem;
-      animation: fadeIn 1s ease-out;
-    }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite;
+        }
 
-    .hero p {
-      font-size: 1.5rem;
-      animation: fadeIn 2s ease-out;
-    }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
 
-    .statistics {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      width: 90%;
-      margin: 2rem 0;
-      padding: 2rem;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    }
+        /* Навигация */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(5, 5, 5, 0.9);
+            backdrop-filter: blur(10px);
+        }
 
-    .statistics .stat {
-      text-align: center;
-      margin: 1rem;
-    }
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .statistics .stat h2 {
-      font-size: 3rem;
-      margin-bottom: 0.5rem;
-      color: #ffcc33;
-      transition: transform 0.3s;
-    }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
 
-    .statistics .stat:hover h2 {
-      transform: scale(1.2);
-    }
+        .logo i {
+            font-size: 2rem;
+        }
 
-    .statistics .stat p {
-      font-size: 1rem;
-      color: #d3d3d3;
-    }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
 
-    .gallery {
-      width: 90%;
-      margin: 2rem 0;
-      text-align: center;
-    }
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            position: relative;
+            padding: 0.5rem 0;
+        }
 
-    .gallery h2 {
-      font-size: 2.5rem;
-      margin-bottom: 1.5rem;
-      color: #ffcc33;
-    }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
 
-    .gallery .photos {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-    }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
 
-    .gallery .photos img {
-      width: 200px;
-      height: 150px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-      transition: transform 0.3s;
-    }
+        /* Героический раздел */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 2rem;
+        }
 
-    .gallery .photos img:hover {
-      transform: scale(1.1);
-    }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent, var(--darker));
+            z-index: 1;
+        }
 
-    .comments {
-      width: 90%;
-      margin: 2rem 0;
-      padding: 1.5rem;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-    }
+        .hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
 
-    .comments h2 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      color: #ffcc33;
-      text-align: center;
-    }
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleGlow 2s infinite alternate;
+        }
 
-    .comments .comment {
-      margin-bottom: 1rem;
-      padding: 1rem;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    }
+        @keyframes titleGlow {
+            from { text-shadow: 0 0 20px rgba(0, 255, 136, 0.5); }
+            to { text-shadow: 0 0 30px rgba(132, 0, 255, 0.8); }
+        }
 
-    .comments .comment p {
-      color: #d3d3d3;
-      font-size: 1rem;
-    }
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #cccccc;
+        }
 
-    .comments form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
 
-    .comments form textarea {
-      width: 100%;
-      height: 80px;
-      padding: 0.5rem;
-      border-radius: 10px;
-      border: none;
-      font-size: 1rem;
-    }
+        .button {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+        }
 
-    .comments form button {
-      align-self: flex-end;
-      padding: 0.5rem 1rem;
-      background: #ffcc33;
-      color: #002366;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
+        .button-primary {
+            background: var(--primary);
+            color: var(--darker);
+        }
 
-    .comments form button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    }
+        .button-secondary {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
 
-    footer {
-      background: #002366;
-      color: #ffcc33;
-      padding: 1rem 0;
-      text-align: center;
-      font-size: 1rem;
-      width: 100%;
-      letter-spacing: 1px;
-    }
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.3);
+        }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
-  </style>
+        /* Секция с карточками */
+        .features {
+            padding: 5rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 136, 0.1));
+            transform: translateX(-100%);
+            transition: transform 0.5s;
+        }
+
+        .feature-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        /* Интерактивная галерея */
+        .gallery {
+            padding: 5rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 1;
+            overflow: hidden;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        /* Контактная форма */
+        .contact {
+            padding: 5rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 5px;
+            color: var(--light);
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        /* Анимированный футер */
+        footer {
+            background: var(--darker);
+            padding: 3rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-section h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul li a {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: var(--light);
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Медиа запросы */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+            }
+        }
+
+        /* Анимация появления элементов */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
-  <header>Bright Future Academy</header>
-  <section class="hero">
-    <h1>Welcome to the Future of Learning</h1>
-    <p>Where innovation meets education.</p>
-  </section>
+    <!-- Звёздный фон создаётся с помощью JavaScript -->
+    <div class="stars"></div>
 
-  <section class="statistics">
-    <div class="stat">
-      <h2>1,200</h2>
-      <p>Students</p>
-    </div>
-    <div class="stat">
-      <h2>80</h2>
-      <p>Teachers</p>
-    </div>
-    <div class="stat">
-      <h2>15</h2>
-      <p>Years of Excellence</p>
-    </div>
-  </section>
-
-  <section class="gallery">
-    <h2>Our Students</h2>
-    <div class="photos">
-      <img src="https://via.placeholder.com/200x150" alt="Student 1">
-      <img src="https://via.placeholder.com/200x150" alt="Student 2">
-      <img src="https://via.placeholder.com/200x150" alt="Student 3">
-      <img src="https://via.placeholder.com/200x150" alt="Student 4">
-    </div>
-  </section>
-
-  <section class="comments">
-    <h2>Comments</h2>
-    <div class="comment">
-      <p><strong>John:</strong> This is an amazing school! My kids love it here.</p>
-    </div>
-    <div class="comment">
-      <p><strong>Emily:</strong> Great teachers and a wonderful community!</p>
+    <!-- Навигация -->
+    <div class="nav-container">
+        <nav>
+            <div class="logo">
+                <i class="fas fa-rocket"></i>
+                Обсерватория
+            </div>
+            <div class="nav-links">
+                <a href="#home">Главная</a>
+                <a href="#about">О нас</a>
+                <a href="#gallery">Галерея</a>
+                <a href="#events">События</a>
+                <a href="#contact">Контакты</a>
+            </div>
+        </nav>
     </div>
 
-    <form>
-      <textarea placeholder="Leave your comment here..."></textarea>
-      <button type="button">Submit</button>
-    </form>
-  </section>
+    <!-- Героический раздел -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Исследуй Вселенную</h1>
+            <p>Добро пожаловать в самую современную обсерваторию. Откройте для себя тайны космоса вместе с нами.</p>
+            <div class="cta-buttons">
+                <a href="#events" class="button button-primary">Забронировать визит</a>
+                <a href="#about" class="button button-secondary">Узнать больше</a>
+            </div>
+        </div>
+    </section>
 
-  <footer>
-    &copy; 2024 Bright Future Academy. All rights reserved.
-  </footer>
+    <!-- Секция особенностей -->
+    <section class="features" id="about">
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <i class="fas fa-telescope feature-icon"></i>
+                <h3>Современное оборудование</h3>
+                <p>Наша обсерватория оснащена самыми современными телескопами и приборами для наблюдения за космосом.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <i class="fas fa-users feature-icon"></i>
+                <h3>Экскурсии</h3>
+                <p>Профессиональные астрономы проведут увлекательные экскурсии и расскажут о тайнах Вселенной.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <i class="fas fa-star feature-icon"></i>
+                <h3>Ночные наблюдения</h3>
+                <p>Уникальная возможность наблюдать за звёздами, планетами и другими космическими объектами.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Галерея -->
+    <section class="gallery" id="gallery">
+        <div class="gallery-grid">
+            <div class="gallery-item fade-in">
+                <img src="/api/placeholder/400/400" alt="Галактика">
+                <div class="gallery-overlay">
+                    <h3>Галактика Андромеды</h3>
+                    <p>Снимок сделан нашим главным телескопом</p>
+                </div>
+            </div>
+            <div class="gallery-item fade-in">
+                <img src="/api/placeholder/400/400" alt="Туманность">
+                <div class="gallery-overlay">
+                    <h3>Туманность Ориона</h3>
+                    <p>Одна из самых ярких туманностей</p>
+                </div>
+            </div>
+            <div class="gallery-item fade-in">
+                <img src="/api/placeholder/400/400" alt="Луна">
+                <div class="gallery-overlay">
+                    <h3>Поверхность Луны</h3>
+                    <p>Детальный снимок лунных кратеров</p>
+                </div>
+            </div>
+            <div class="gallery-item fade-in">
+                <img src="/api/placeholder/400/400" alt="Сатурн">
+                <div class="gallery-overlay">
+                    <h3>Кольца Сатурна</h3>
+                    <p>Вид через главный телескоп</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Контактная форма -->
+    <section class="contact" id="contact">
+        <div class="contact-form fade-in">
+            <h2>Связаться с нами</h2>
+            <form>
+                <div class="form-group">
+                    <label for="name">Ваше имя</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Сообщение</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="button button-primary">Отправить</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>О нас</h4>
+                <p>Мы - современная обсерватория, открывающая тайны космоса для всех желающих.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Быстрые ссылки</h4>
+                <ul>
+                    <li><a href="#home">Главная</a></li>
+                    <li><a href="#about">О нас</a></li>
+                    <li><a href="#gallery">Галерея</a></li>
+                    <li><a href="#events">События</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Контакты</h4>
+                <ul>
+                    <li><i class="fas fa-phone"></i> +7 (900) 123-45-67</li>
+                    <li><i class="fas fa-envelope"></i> info@observatory.ru</li>
+                    <li><i class="fas fa-map-marker-alt"></i> ул. Звёздная, 42</li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Создание звёздного фона
+        function createStars() {
+            const stars = document.querySelector('.stars');
+            const count = 200;
+            
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Случайное положение
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                
+                // Случайный размер
+                const size = Math.random() * 3;
+                
+                // Случайная длительность мерцания
+                const duration = 3 + Math.random() * 3;
+                
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.setProperty('--duration', `${duration}s`);
+                
+                stars.appendChild(star);
+            }
+        }
+
+        // Анимация появления элементов при скролле
+        function handleScroll() {
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach(element => {
+                const position = element.getBoundingClientRect();
+                
+                // Если элемент входит в область видимости
+                if (position.top < window.innerHeight - 100) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            handleScroll(); // Первичная проверка при загрузке
+            window.addEventListener('scroll', handleScroll);
+        });
+    </script>
 </body>
 </html>
